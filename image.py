@@ -71,9 +71,21 @@ class ImageVisualizer:
                 if len(self.history)>1:
                     self.history.pop()
                     self.current_image = self.history[-1].copy()
-                    self.update_display
+                    self.update_display()
+            elif e == '-CLEAR-':
+                if self.original_image is not None:
+                    self.current_image = self.original_image.copy()
+                    self.history = [self.current_image.copy()]
+                    self.update_display()
+            elif e == '-GRAY-':
                 if self.current_image is not None:
-                    self.add_history(cv2.bitwise_not(self.current_image))
+                    g = cv2.cvtColor(self.current_image, cv2.COLOR_RGB2GRAY)
+                    rgb = cv2.cvtColor(g, cv2.COLOR_GRAY2RGB)
+                    self.add_history(rgb)
+            elif e == '-INV-':
+                if self.current_image is not None:
+                    inv = cv2.bitwise_not(self.current_image)
+                    self.add_history(inv)
             elif e == '-CONTRAST-':
                 if self.current_image is not None:
                     lab = cv2.cvtColor(self.current_image, cv2.COLOR_RGB2LAB)
